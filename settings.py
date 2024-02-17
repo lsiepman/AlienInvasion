@@ -3,5 +3,5 @@ class Settings:
 
     def __init__(self) -> None:
         # Screen settings
-        self.screen_size = (1200, 800)
+        self.screen_size = (1400, 750)
         self.bg_colour = (24, 27, 97)
