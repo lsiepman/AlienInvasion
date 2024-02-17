@@ -5,3 +5,4 @@ class Settings:
         # Screen settings
         self.screen_size = (1400, 750)
         self.bg_colour = (24, 27, 97)
+        self.ship_speed_factor = 0.5
