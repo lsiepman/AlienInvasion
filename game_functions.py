@@ -95,7 +95,9 @@ def start_game(settings, screen, stats, ship, aliens, bullets):
 
 
 # update functions
-def update_screen(settings, stats, screen, ship, aliens, bullets, stars, play_button):
+def update_screen(
+    settings, stats, sb, screen, ship, aliens, bullets, stars, play_button
+):
     "Update images on the screen and flip to the new screen"
     screen.fill(settings.bg_colour)
     stars.draw(screen)
@@ -103,6 +105,9 @@ def update_screen(settings, stats, screen, ship, aliens, bullets, stars, play_bu
         bullet.draw_bullet()
     ship.blitme()
     aliens.draw(screen)
+
+    # draw score on top of previously drawn items
+    sb.show_score()
 
     if not stats.game_active:
         play_button.draw_button()

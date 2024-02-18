@@ -5,6 +5,7 @@ from ship import Ship
 import game_functions as gf
 from game_stats import GameStats
 from button import Button
+from scoreboard import Scoreboard
 
 
 def run_game():
@@ -17,6 +18,7 @@ def run_game():
     screen = pygame.display.set_mode(settings.screen_size)
     pygame.display.set_caption("Alien Invasion")
     stats = GameStats(settings)
+    sb = Scoreboard(settings, screen, stats)
 
     # make a ship
     ship = Ship(screen, settings)
@@ -38,7 +40,7 @@ def run_game():
     while True:
         gf.check_events(settings, screen, stats, play_button, ship, aliens, bullets)
         gf.update_screen(
-            settings, stats, screen, ship, aliens, bullets, stars, play_button
+            settings, stats, sb, screen, ship, aliens, bullets, stars, play_button
         )
         if stats.game_active:
             ship.update()
