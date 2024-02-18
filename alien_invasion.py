@@ -8,28 +8,32 @@ import game_functions as gf
 def run_game():
 
     # create instancce of settings class
-    s = Settings()
+    settings = Settings()
 
     # Init game and create screen object
     pygame.init()
-    screen = pygame.display.set_mode(s.screen_size)
+    screen = pygame.display.set_mode(settings.screen_size)
     pygame.display.set_caption("Alien Invasion")
 
     # make a ship
-    ship = Ship(screen, s)
+    ship = Ship(screen, settings)
 
     # make bullets
     bullets = Group()
 
     # make aliens
     aliens = Group()
-    gf.create_fleet(s, screen, ship, aliens)
+    gf.create_fleet(settings, screen, ship, aliens)
+
+    # draw stars
+    stars = Group()
+    gf.decorate_sky(settings, screen, stars)
 
     while True:
-        gf.check_events(s, screen, ship, bullets)
+        gf.check_events(settings, screen, ship, bullets)
         ship.update()
         gf.update_bullets(bullets)
-        gf.update_screen(s, screen, ship, aliens, bullets)
+        gf.update_screen(settings, screen, ship, aliens, bullets, stars)
 
 
 if __name__ == "__main__":

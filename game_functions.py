@@ -1,8 +1,9 @@
 import sys
-from zoneinfo import available_timezones
+from random import randint
 import pygame
 from bullet import Bullet
 from alien import Alien
+from star import Star
 
 
 def check_keydown_events(event, settings, screen, ship, bullets):
@@ -45,9 +46,10 @@ def check_events(settings, screen, ship, bullets):
             check_keyup_event(event, ship)
 
 
-def update_screen(settings, screen, ship, aliens, bullets):
+def update_screen(settings, screen, ship, aliens, bullets, stars):
     "Update images on the screen and flip to the new screen"
     screen.fill(settings.bg_colour)
+    stars.draw(screen)
     for bullet in bullets:
         bullet.draw_bullet()
     ship.blitme()
@@ -105,3 +107,34 @@ def create_fleet(settings, screen, ship, aliens):
     for row_number in range(number_rows):
         for alien_number in range(number_aliens_x):
             create_alien(settings, screen, aliens, alien_number, row_number)
+
+
+def get_max_star_rows(settings, star_height):
+    return int(settings.screen_size[1] / (randint(7, 14) * star_height))
+
+
+def get_max_star_cols(settings, star_width):
+    return int(settings.screen_size[0] / (randint(7, 14) * star_width))
+
+
+def create_star(settings, screen, stars):
+    "Create an alien and place it in the row"
+    star = Star(settings, screen)
+    star_width = star.rect.width
+    star.x = star_width + randint(0, settings.screen_size[0] - star_width)
+    star.rect.x = star.x
+    star.rect.y = star.rect.height + randint(
+        0, settings.screen_size[0] - star.rect.height
+    )
+    stars.add(star)
+
+
+def decorate_sky(settings, screen, stars):
+    "Create a full fleet of aliens"
+    star = Star(settings, screen)
+    number_stars_x = get_max_star_cols(settings, star.rect.width)
+    number_rows = get_max_star_rows(settings, star.rect.height)
+
+    for _ in range(number_rows):
+        for _ in range(number_stars_x):
+            create_star(settings, screen, stars)
