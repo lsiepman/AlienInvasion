@@ -11,3 +11,4 @@ class GameStats:
 
     def reset_stats(self):
         self.ships_left = self.settings.ship_limit
+        self.settings.initialise_dynamic_settings()
