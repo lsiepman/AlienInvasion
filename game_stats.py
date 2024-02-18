@@ -5,6 +5,7 @@ class GameStats:
         "Initialise stats"
         self.settings = settings
         self.reset_stats()
+        self.high_score = 0
 
         # start game in an inactive state
         self.game_active = False

@@ -144,6 +144,7 @@ def check_bullet_alien_collisions(settings, stats, sb, screen, ship, aliens, bul
         for item in collisions.values():
             stats.score += settings.alien_points * len(item)
             sb.prep_score()
+        check_high_score(stats, sb)
 
     # remove bullets outside screen
     for bullet in bullets.copy():
@@ -265,3 +266,9 @@ def decorate_sky(settings, screen, stars):
     for _ in range(number_rows):
         for _ in range(number_stars_x):
             create_star(settings, screen, stars)
+
+
+def check_high_score(stats, sb):
+    if stats.score > stats.high_score:
+        stats.high_score = stats.score
+        sb.prep_high_score()
