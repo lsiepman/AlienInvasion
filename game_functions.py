@@ -7,14 +7,24 @@ from alien import Alien
 from star import Star
 
 
-def check_events(settings, screen, stats, play_button, ship, bullets):
+def check_events(settings, screen, stats, play_button, ship, aliens, bullets):
     "Respond to keypresses and mouse events"
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_play_button(stats, play_button, mouse_x, mouse_y)
+            check_play_button(
+                settings,
+                screen,
+                stats,
+                play_button,
+                ship,
+                aliens,
+                bullets,
+                mouse_x,
+                mouse_y,
+            )
         elif event.type == pygame.KEYDOWN:
             check_keydown_events(event, settings, screen, ship, bullets)
 
@@ -62,9 +72,18 @@ def check_keyup_event(event, ship):
         ship.movement = False
 
 
-def check_play_button(stats, play_button, mouse_x, mouse_y):
-    if play_button.rect.collidepoint(mouse_x, mouse_y):
+def check_play_button(
+    settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y
+):
+    if play_button.rect.collidepoint(mouse_x, mouse_y) and not stats.game_active:
+        pygame.mouse.set_visible(False)
+        stats.reset_stats()
         stats.game_active = True
+
+        aliens.empty()
+        bullets.empty()
+        create_fleet(settings, screen, ship, aliens)
+        ship.ship_to_start()
 
 
 # update functions
@@ -135,6 +154,7 @@ def ship_hit(settings, stats, screen, ship, aliens, bullets):
 
     else:
         stats.game_active = False
+        pygame.mouse.set_visible(True)
 
 
 # alien functions

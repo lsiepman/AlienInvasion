@@ -36,7 +36,7 @@ def run_game():
     play_button = Button(settings, screen, "Play")
 
     while True:
-        gf.check_events(settings, screen, stats, play_button, ship, bullets)
+        gf.check_events(settings, screen, stats, play_button, ship, aliens, bullets)
         gf.update_screen(
             settings, stats, screen, ship, aliens, bullets, stars, play_button
         )

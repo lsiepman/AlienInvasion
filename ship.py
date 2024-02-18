@@ -1,7 +1,5 @@
 import pygame
 
-from game_functions import ship_hit
-
 
 class Ship:
 
