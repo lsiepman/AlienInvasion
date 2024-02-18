@@ -14,3 +14,8 @@ class Settings:
         self.bullet_size = (3, 15)
         self.bullet_colour = (201, 178, 62)
         self.bullets_allowed = 7
+
+        # alien settings
+        self.alien_speed_factor = self.ship_speed_factor * (2 / 3)
+        self.fleet_drop_speed = 10
+        self.fleet_direction = 1  # 1 = right, -1 = left
