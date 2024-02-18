@@ -1,4 +1,5 @@
 import pygame
+from pygame.sprite import Group
 from settings import Settings
 from ship import Ship
 import game_functions as gf
@@ -17,10 +18,14 @@ def run_game():
     # make a ship
     ship = Ship(screen, s)
 
+    # make bullets
+    bullets = Group()
+
     while True:
-        gf.check_events(ship)
+        gf.check_events(s, screen, ship, bullets)
         ship.update()
-        gf.update_screen(s, screen, ship)
+        gf.update_bullets(bullets)
+        gf.update_screen(s, screen, ship, bullets)
 
 
 if __name__ == "__main__":
