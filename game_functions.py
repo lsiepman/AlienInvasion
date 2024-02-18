@@ -7,7 +7,7 @@ from alien import Alien
 from star import Star
 
 
-def check_events(settings, screen, stats, play_button, ship, aliens, bullets):
+def check_events(settings, screen, stats, sb, play_button, ship, aliens, bullets):
     "Respond to keypresses and mouse events"
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -18,6 +18,7 @@ def check_events(settings, screen, stats, play_button, ship, aliens, bullets):
                 settings,
                 screen,
                 stats,
+                sb,
                 play_button,
                 ship,
                 aliens,
@@ -26,14 +27,16 @@ def check_events(settings, screen, stats, play_button, ship, aliens, bullets):
                 mouse_y,
             )
         elif event.type == pygame.KEYDOWN:
-            check_keydown_events(event, settings, stats, screen, ship, aliens, bullets)
+            check_keydown_events(
+                event, settings, stats, sb, screen, ship, aliens, bullets
+            )
 
         elif event.type == pygame.KEYUP:
             check_keyup_event(event, ship)
 
 
 # Interaction functions
-def check_keydown_events(event, settings, stats, screen, ship, aliens, bullets):
+def check_keydown_events(event, settings, stats, sb, screen, ship, aliens, bullets):
     if event.key == pygame.K_ESCAPE:
         sys.exit()
 
@@ -58,7 +61,7 @@ def check_keydown_events(event, settings, stats, screen, ship, aliens, bullets):
 
     elif event.key == pygame.K_RETURN:
         if not stats.game_active:
-            start_game(settings, screen, stats, ship, aliens, bullets)
+            start_game(settings, screen, stats, sb, ship, aliens, bullets)
 
 
 def check_keyup_event(event, ship):
@@ -77,15 +80,17 @@ def check_keyup_event(event, ship):
 
 
 def check_play_button(
-    settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y
+    settings, screen, stats, sb, play_button, ship, aliens, bullets, mouse_x, mouse_y
 ):
     if play_button.rect.collidepoint(mouse_x, mouse_y) and not stats.game_active:
-        start_game(settings, screen, stats, ship, aliens, bullets)
+        start_game(settings, screen, stats, sb, ship, aliens, bullets)
 
 
-def start_game(settings, screen, stats, ship, aliens, bullets):
+def start_game(settings, screen, stats, sb, ship, aliens, bullets):
     pygame.mouse.set_visible(False)
     stats.reset_stats()
+    sb.prep_score()
+    sb.prep_level()
     stats.game_active = True
 
     aliens.empty()
@@ -154,6 +159,8 @@ def check_bullet_alien_collisions(settings, stats, sb, screen, ship, aliens, bul
     if len(aliens) == 0:
         bullets.empty()
         settings.increase_speed()
+        stats.level += 1
+        sb.prep_level()
         create_fleet(settings, screen, ship, aliens)
 
 

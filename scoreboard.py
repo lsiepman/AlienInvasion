@@ -14,6 +14,7 @@ class Scoreboard:
 
         self.prep_score()
         self.prep_high_score()
+        self.prep_level()
 
     def prep_score(self):
         self.score_image = self.font.render(
@@ -39,6 +40,19 @@ class Scoreboard:
         self.high_score_rect.centerx = self.screen_rect.centerx
         self.high_score_rect.top = 20
 
+    def prep_level(self):
+        self.level_image = self.font.render(
+            f"level: {int(self.stats.level)}",
+            True,
+            self.text_colour,
+            self.settings.bg_colour,
+        )
+
+        self.level_rect = self.level_image.get_rect()
+        self.level_rect.left = 20
+        self.level_rect.top = 20
+
     def show_score(self):
         self.screen.blit(self.score_image, self.score_rect)
         self.screen.blit(self.high_score_image, self.high_score_rect)
+        self.screen.blit(self.level_image, self.level_rect)
