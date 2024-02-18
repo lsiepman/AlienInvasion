@@ -98,16 +98,20 @@ def check_bullet_alien_collisions(settings, screen, ship, aliens, bullets):
 # ship functions
 def ship_hit(settings, stats, screen, ship, aliens, bullets):
     "Respond to ship being hit by an alien"
-    stats.ships_left -= 1
+    if stats.ships_left > 0:
+        stats.ships_left -= 1
 
-    aliens.empty()
-    bullets.empty()
+        aliens.empty()
+        bullets.empty()
 
-    create_fleet(settings, screen, ship, aliens)
-    ship.ship_to_start()
+        create_fleet(settings, screen, ship, aliens)
+        ship.ship_to_start()
 
-    # pause
-    sleep(0.5)
+        # pause
+        sleep(0.5)
+
+    else:
+        stats.game_active = False
 
 
 # alien functions
