@@ -1,5 +1,7 @@
 import pygame
 
+from game_functions import ship_hit
+
 
 class Ship:
 
@@ -43,3 +45,13 @@ class Ship:
 
         self.rect.centerx = self.center1
         self.rect.centery = self.center2
+
+    def ship_to_start(self):
+        self.rect.centerx = self.screen_rect.centerx
+        self.rect.bottom = self.screen_rect.bottom
+        self.center1 = float(self.rect.centerx)
+        self.center2 = float(self.rect.centery)
+
+        # movement flag
+        self.movement = False
+        self.direction = None

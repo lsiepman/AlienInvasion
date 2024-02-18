@@ -1,4 +1,5 @@
 import sys
+from time import sleep
 from random import randint
 import pygame
 from bullet import Bullet
@@ -65,12 +66,12 @@ def update_bullets(settings, screen, ship, aliens, bullets):
     check_bullet_alien_collisions(settings, screen, ship, aliens, bullets)
 
 
-def update_aliens(settings, ship, aliens):
+def update_aliens(settings, stats, screen, ship, aliens, bullets):
     check_fleet_edges(settings, aliens)
     aliens.update()
 
     if pygame.sprite.spritecollideany(ship, aliens):
-        print("Ship hit!!!")
+        ship_hit(settings, stats, screen, ship, aliens, bullets)
 
 
 # bullet functions
@@ -91,6 +92,21 @@ def check_bullet_alien_collisions(settings, screen, ship, aliens, bullets):
     if len(aliens) == 0:
         bullets.empty()
         create_fleet(settings, screen, ship, aliens)
+
+
+# ship functions
+def ship_hit(settings, stats, screen, ship, aliens, bullets):
+    "Respond to ship being hit by an alien"
+    stats.ships_left -= 1
+
+    aliens.empty()
+    bullets.empty()
+
+    create_fleet(settings, screen, ship, aliens)
+    ship.ship_to_start()
+
+    # pause
+    sleep(0.5)
 
 
 # alien functions
