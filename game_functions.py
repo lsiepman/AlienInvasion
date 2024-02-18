@@ -26,14 +26,14 @@ def check_events(settings, screen, stats, play_button, ship, aliens, bullets):
                 mouse_y,
             )
         elif event.type == pygame.KEYDOWN:
-            check_keydown_events(event, settings, screen, ship, bullets)
+            check_keydown_events(event, settings, stats, screen, ship, aliens, bullets)
 
         elif event.type == pygame.KEYUP:
             check_keyup_event(event, ship)
 
 
 # Interaction functions
-def check_keydown_events(event, settings, screen, ship, bullets):
+def check_keydown_events(event, settings, stats, screen, ship, aliens, bullets):
     if event.key == pygame.K_ESCAPE:
         sys.exit()
 
@@ -56,6 +56,10 @@ def check_keydown_events(event, settings, screen, ship, bullets):
     elif event.key == pygame.K_SPACE:
         fire_bullet(settings, screen, ship, bullets)
 
+    elif event.key == pygame.K_RETURN:
+        if not stats.game_active:
+            start_game(settings, screen, stats, ship, aliens, bullets)
+
 
 def check_keyup_event(event, ship):
     movement_keys = [
@@ -76,14 +80,18 @@ def check_play_button(
     settings, screen, stats, play_button, ship, aliens, bullets, mouse_x, mouse_y
 ):
     if play_button.rect.collidepoint(mouse_x, mouse_y) and not stats.game_active:
-        pygame.mouse.set_visible(False)
-        stats.reset_stats()
-        stats.game_active = True
+        start_game(settings, screen, stats, ship, aliens, bullets)
 
-        aliens.empty()
-        bullets.empty()
-        create_fleet(settings, screen, ship, aliens)
-        ship.ship_to_start()
+
+def start_game(settings, screen, stats, ship, aliens, bullets):
+    pygame.mouse.set_visible(False)
+    stats.reset_stats()
+    stats.game_active = True
+
+    aliens.empty()
+    bullets.empty()
+    create_fleet(settings, screen, ship, aliens)
+    ship.ship_to_start()
 
 
 # update functions
