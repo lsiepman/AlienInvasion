@@ -4,6 +4,7 @@ from settings import Settings
 from ship import Ship
 import game_functions as gf
 from game_stats import GameStats
+from button import Button
 
 
 def run_game():
@@ -31,13 +32,18 @@ def run_game():
     stars = Group()
     gf.decorate_sky(settings, screen, stars)
 
+    # make play button
+    play_button = Button(settings, screen, "Play")
+
     while True:
-        gf.check_events(settings, screen, ship, bullets)
+        gf.check_events(settings, screen, stats, play_button, ship, bullets)
+        gf.update_screen(
+            settings, stats, screen, ship, aliens, bullets, stars, play_button
+        )
         if stats.game_active:
             ship.update()
             gf.update_bullets(settings, screen, ship, aliens, bullets)
             gf.update_aliens(settings, stats, screen, ship, aliens, bullets)
-            gf.update_screen(settings, screen, ship, aliens, bullets, stars)
 
 
 if __name__ == "__main__":

@@ -7,11 +7,14 @@ from alien import Alien
 from star import Star
 
 
-def check_events(settings, screen, ship, bullets):
+def check_events(settings, screen, stats, play_button, ship, bullets):
     "Respond to keypresses and mouse events"
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            check_play_button(stats, play_button, mouse_x, mouse_y)
         elif event.type == pygame.KEYDOWN:
             check_keydown_events(event, settings, screen, ship, bullets)
 
@@ -19,7 +22,7 @@ def check_events(settings, screen, ship, bullets):
             check_keyup_event(event, ship)
 
 
-# Keyboard functions
+# Interaction functions
 def check_keydown_events(event, settings, screen, ship, bullets):
     if event.key == pygame.K_ESCAPE:
         sys.exit()
@@ -45,11 +48,27 @@ def check_keydown_events(event, settings, screen, ship, bullets):
 
 
 def check_keyup_event(event, ship):
-    ship.movement = False
+    movement_keys = [
+        pygame.K_RIGHT,
+        pygame.K_d,
+        pygame.K_LEFT,
+        pygame.K_a,
+        pygame.K_UP,
+        pygame.K_w,
+        pygame.K_DOWN,
+        pygame.K_s,
+    ]
+    if event.key in movement_keys:
+        ship.movement = False
+
+
+def check_play_button(stats, play_button, mouse_x, mouse_y):
+    if play_button.rect.collidepoint(mouse_x, mouse_y):
+        stats.game_active = True
 
 
 # update functions
-def update_screen(settings, screen, ship, aliens, bullets, stars):
+def update_screen(settings, stats, screen, ship, aliens, bullets, stars, play_button):
     "Update images on the screen and flip to the new screen"
     screen.fill(settings.bg_colour)
     stars.draw(screen)
@@ -57,6 +76,10 @@ def update_screen(settings, screen, ship, aliens, bullets, stars):
         bullet.draw_bullet()
     ship.blitme()
     aliens.draw(screen)
+
+    if not stats.game_active:
+        play_button.draw_button()
+
     pygame.display.flip()
 
 
