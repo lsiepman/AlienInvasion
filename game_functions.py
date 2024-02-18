@@ -91,6 +91,7 @@ def start_game(settings, screen, stats, sb, ship, aliens, bullets):
     stats.reset_stats()
     sb.prep_score()
     sb.prep_level()
+    sb.prep_ships()
     stats.game_active = True
 
     aliens.empty()
@@ -126,13 +127,13 @@ def update_bullets(settings, stats, sb, screen, ship, aliens, bullets):
     check_bullet_alien_collisions(settings, stats, sb, screen, ship, aliens, bullets)
 
 
-def update_aliens(settings, stats, screen, ship, aliens, bullets):
+def update_aliens(settings, stats, sb, screen, ship, aliens, bullets):
     check_fleet_edges(settings, aliens)
-    check_aliens_bottom(settings, stats, screen, ship, aliens, bullets)
+    check_aliens_bottom(settings, stats, sb, screen, ship, aliens, bullets)
     aliens.update()
 
     if pygame.sprite.spritecollideany(ship, aliens):
-        ship_hit(settings, stats, screen, ship, aliens, bullets)
+        ship_hit(settings, stats, sb, screen, ship, aliens, bullets)
 
 
 # bullet functions
@@ -165,10 +166,11 @@ def check_bullet_alien_collisions(settings, stats, sb, screen, ship, aliens, bul
 
 
 # ship functions
-def ship_hit(settings, stats, screen, ship, aliens, bullets):
+def ship_hit(settings, stats, sb, screen, ship, aliens, bullets):
     "Respond to ship being hit by an alien"
     if stats.ships_left > 0:
         stats.ships_left -= 1
+        sb.prep_ships()
 
         aliens.empty()
         bullets.empty()
@@ -234,12 +236,12 @@ def change_fleet_direction(settings, aliens):
     settings.fleet_direction *= -1
 
 
-def check_aliens_bottom(settings, stats, screen, ship, aliens, bullets):
+def check_aliens_bottom(settings, stats, sb, screen, ship, aliens, bullets):
     screen_rect = screen.get_rect()
     for alien in aliens.sprites():
         if alien.rect.bottom >= screen_rect.bottom:
             # same consequences as a hit ship
-            ship_hit(settings, stats, screen, ship, aliens, bullets)
+            ship_hit(settings, stats, sb, screen, ship, aliens, bullets)
             break
 
 
